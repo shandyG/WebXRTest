@@ -3,13 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Quest 3 WebXR - White Cube</title>
+  <title>Quest 3 WebXR - AR White Cube</title>
   <style>
-    body {
+    html, body {
       margin: 0;
+      height: 100%;
       overflow: hidden;
-      background: #000;
+      background: transparent;
       font-family: sans-serif;
+    }
+
+    #app {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
     }
 
     #ui {
@@ -17,24 +24,31 @@
       top: 12px;
       left: 12px;
       z-index: 10;
-      color: white;
+      color: #fff;
+      background: rgba(0,0,0,0.35);
+      padding: 10px 12px;
+      border-radius: 10px;
+      user-select: none;
     }
 
     button {
       font-size: 16px;
       padding: 10px 14px;
+      margin-top: 8px;
     }
+
+    #msg { margin-top: 8px; font-size: 12px; opacity: 0.9; }
   </style>
 </head>
 <body>
+  <div id="app"></div>
 
   <div id="ui">
-    <div>Quest 3 WebXR 白キューブ</div>
-    <button id="enter">Enter VR</button>
+    <div>Quest 3 / WebXR（AR）: 白いキューブ</div>
+    <button id="enter">Enter AR</button>
+    <div id="msg"></div>
   </div>
 
-  <!-- JSを外部ファイルとして読み込む -->
   <script type="module" src="./main.js"></script>
-
 </body>
 </html>
