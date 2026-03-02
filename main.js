@@ -2,7 +2,7 @@ import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 import { Text } from "https://unpkg.com/troika-three-text@0.49.0/dist/troika-three-text.esm.js";
 
 // ====== 設定：あなたのサーバIP/ホスト名に変更 ======
-const WS_URL = "wss://YOUR_SERVER_IP_OR_HOST:8443"; // 例: wss://192.168.0.10:8443
+const WS_URL = "wss://192.168.11.50:8443"; // 例: wss://192.168.0.10:8443
 // ==============================================
 
 let scene, camera, renderer;
@@ -145,3 +145,4 @@ function onResize() {
 function setMsg(t) {
   document.getElementById("msg").textContent = t;
 }
+
