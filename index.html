@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>WebXR 01 - Hello XR</title>
+  <style>
+    body { margin: 0; background: #0b0b0b; color: #fff; font-family: system-ui, sans-serif; }
+    #hud {
+      position: fixed; left: 12px; top: 12px;
+      background: rgba(0,0,0,.55);
+      padding: 10px 12px; border-radius: 10px;
+      font-size: 14px; line-height: 1.4;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div id="hud">
+    WebXR 01: Hello XR<br/>
+    Questで「Enter VR」を押してね
+  </div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
