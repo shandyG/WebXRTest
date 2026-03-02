@@ -5,10 +5,9 @@ let scene, camera, renderer, cube;
 init();
 
 function init() {
-  // シーン作成
   scene = new THREE.Scene();
+  scene.background = null; // 透明（AR用）
 
-  // カメラ
   camera = new THREE.PerspectiveCamera(
     70,
     window.innerWidth / window.innerHeight,
@@ -16,71 +15,81 @@ function init() {
     50
   );
 
-  // レンダラー
-  renderer = new THREE.WebGLRenderer({ antialias: true });
+  // ★ARでは透明背景が必要なので alpha:true
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.xr.enabled = true;
 
-  document.body.appendChild(renderer.domElement);
+  // キャンバスを背面に
+  const app = document.getElementById("app");
+  app.appendChild(renderer.domElement);
 
-  // ライト（白く見せるために必要）
+  // キャンバスがUIクリックを邪魔しないように保険
+  renderer.domElement.style.position = "fixed";
+  renderer.domElement.style.inset = "0";
+  renderer.domElement.style.zIndex = "0";
+
+  // ライト（白く見せる）
   scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 1.2));
+  const dir = new THREE.DirectionalLight(0xffffff, 1.0);
+  dir.position.set(1, 2, 1);
+  scene.add(dir);
 
-  const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
-  dirLight.position.set(1, 2, 1);
-  scene.add(dirLight);
-
-  // 白いキューブ（10cm角）
-  const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
-  const material = new THREE.MeshStandardMaterial({
-    color: 0xffffff,
-    roughness: 0.8,
-    metalness: 0.0
-  });
-
-  cube = new THREE.Mesh(geometry, material);
-
-  // ユーザーの1m前・目の高さ
-  cube.position.set(0, 1.5, -1.0);
+  // 白いキューブ（10cm）
+  cube = new THREE.Mesh(
+    new THREE.BoxGeometry(0.1, 0.1, 0.1),
+    new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.8, metalness: 0.0 })
+  );
+  // AR開始後は参照空間基準になるので、まずは原点から前方へ
+  cube.position.set(0, 0, -1.0);
   scene.add(cube);
 
-  // ボタン処理
-  document.getElementById("enter").addEventListener("click", enterVR);
-
-  // リサイズ対応
+  document.getElementById("enter").addEventListener("click", enterAR);
   window.addEventListener("resize", onWindowResize);
 
-  // 描画ループ
   renderer.setAnimationLoop(render);
+  setMsg("Enter AR を押してパススルーARを開始（HTTPS必須）");
 }
 
-async function enterVR() {
-  if (!navigator.xr) {
-    alert("WebXR未対応ブラウザです。Questのブラウザで開いてください。");
-    return;
+async function enterAR() {
+  try {
+    if (!navigator.xr) {
+      setMsg("WebXR未対応です。Meta Quest Browserで開いてください。");
+      return;
+    }
+
+    const supported = await navigator.xr.isSessionSupported("immersive-ar");
+    if (!supported) {
+      setMsg("この環境では immersive-ar（パススルーAR）がサポートされていません。");
+      return;
+    }
+
+    // 参照空間：床基準が取れるなら local-floor が便利
+    renderer.xr.setReferenceSpaceType("local-floor");
+
+    const session = await navigator.xr.requestSession("immersive-ar", {
+      optionalFeatures: ["local-floor", "bounded-floor"]
+    });
+
+    renderer.xr.setSession(session);
+
+    document.getElementById("enter").style.display = "none";
+    setMsg("AR開始。前方に白いキューブが表示されます。");
+
+    session.addEventListener("end", () => {
+      document.getElementById("enter").style.display = "inline-block";
+      setMsg("ARを終了しました。");
+    });
+  } catch (e) {
+    console.error(e);
+    setMsg("AR開始に失敗: " + (e?.message ?? e));
   }
-
-  const supported = await navigator.xr.isSessionSupported("immersive-vr");
-  if (!supported) {
-    alert("immersive-vr がサポートされていません。");
-    return;
-  }
-
-  const session = await navigator.xr.requestSession("immersive-vr", {
-    optionalFeatures: ["local-floor", "bounded-floor"]
-  });
-
-  renderer.xr.setSession(session);
-
-  document.getElementById("enter").style.display = "none";
 }
 
 function render() {
-  // 少し回転させる
   cube.rotation.y += 0.01;
   cube.rotation.x += 0.005;
-
   renderer.render(scene, camera);
 }
 
@@ -88,4 +97,8 @@ function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function setMsg(t) {
+  document.getElementById("msg").textContent = t;
 }
