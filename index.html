@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Quest 3 WebXR AR + WebSocket Text</title>
+  <title>Quest 3 AR + WebSocket Text</title>
   <style>
     html, body { margin: 0; height: 100%; overflow: hidden; background: transparent; font-family: sans-serif; }
     #app { position: fixed; inset: 0; z-index: 0; }
     #ui {
       position: fixed; top: 12px; left: 12px; z-index: 10;
-      color: #fff; background: rgba(0,0,0,0.35);
-      padding: 10px 12px; border-radius: 10px; user-select: none;
-      max-width: 70vw;
+      color: #fff; background: rgba(0,0,0,0.35); padding: 10px 12px; border-radius: 10px;
+      user-select: none;
+      max-width: 80vw;
     }
     button { font-size: 16px; padding: 10px 14px; margin-top: 8px; }
     #msg { margin-top: 8px; font-size: 12px; opacity: 0.9; white-space: pre-wrap; }
@@ -21,7 +21,7 @@
   <div id="app"></div>
 
   <div id="ui">
-    <div>Quest 3 / WebXR（AR）+ WebSocket（受信でテキスト更新）</div>
+    <div>Quest 3 / WebXR（AR）: WebSocketでテキスト更新</div>
     <button id="enter">Enter AR</button>
     <div id="msg"></div>
   </div>
