@@ -1,7 +1,7 @@
 import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 
 // ★あなたのWSSサーバーに合わせて変更（例：PCのIP）
-const WS_URL = "wss://YOUR_PC_IP_OR_HOST:8081";
+const WS_URL = "wss://162.120.184.20:8081";
 
 let scene, camera, renderer;
 let labelMesh, labelCanvas, labelCtx, labelTexture;
@@ -208,3 +208,4 @@ function roundRect(ctx, x, y, w, h, r) {
 function setMsg(t) {
   document.getElementById("msg").textContent = t;
 }
+
