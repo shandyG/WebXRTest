@@ -2,23 +2,35 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>WebXR 01 - Hello XR</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+  <title>WebXR 01 - Quest + iPhone</title>
   <style>
-    body { margin: 0; background: #0b0b0b; color: #fff; font-family: system-ui, sans-serif; }
+    body { margin: 0; background: #0b0b0b; color: #fff; font-family: system-ui, sans-serif; overflow: hidden; }
     #hud {
-      position: fixed; left: 12px; top: 12px;
+      position: fixed; left: 12px; top: 12px; right: 12px;
       background: rgba(0,0,0,.55);
       padding: 10px 12px; border-radius: 10px;
-      font-size: 14px; line-height: 1.4;
+      font-size: 14px; line-height: 1.45;
       z-index: 10;
+      display: grid;
+      gap: 6px;
     }
+    .tag { display:inline-block; padding: 2px 8px; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; font-size: 12px; opacity: .9; }
+    #row { display:flex; gap:8px; flex-wrap: wrap; align-items:center; }
+    button { cursor: pointer; }
   </style>
 </head>
 <body>
   <div id="hud">
-    WebXR 01: Hello XR<br/>
-    Questで「Enter VR」を押してね
+    <div id="row">
+      <span class="tag" id="modeTag">mode: -</span>
+      <span class="tag" id="xrTag">webxr: -</span>
+      <button id="resetBtn" type="button">Reset View</button>
+    </div>
+    <div id="msg">
+      Quest: Enter VR を押すと没入<br/>
+      iPhone/PC: 指/マウスで視点操作（フォールバック）
+    </div>
   </div>
 
   <script type="module" src="./main.js"></script>
